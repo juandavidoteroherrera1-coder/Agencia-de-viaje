@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rumbo Aventura</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif}
+body{background:#f0fdfa;color:#0f172a}
+.header{background:#fff;position:sticky;top:0;z-index:100;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 20px rgba(0,0,0,.08)}
+.header h1{font-size:22px;background:linear-gradient(135deg,#0f766e,#0ea5e9);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header nav a{color:#0f172a;text-decoration:none;font-weight:600;font-size:13px;padding:8px 10px}
+.banner{background:linear-gradient(rgba(15,23,42,.6),rgba(15,118,110,.7)),url('https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1200');background-size:cover;background-position:center;color:#fff;text-align:center;padding:70px 20px;border-radius:0 0 28px 28px}
+.banner h2{font-size:32px;line-height:1.1}
+.banner p{margin-top:10px;opacity:.9}
+.banner input{width:100%;max-width:520px;padding:14px 18px;border-radius:999px;border:none;margin-top:18px}
+section{padding:28px 16px;max-width:1100px;margin:auto}
+h2{font-size:24px;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
+.filtros{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.filtros select{padding:11px;border-radius:999px;flex:1;border:1.5px solid #cbd5e1;background:#fff;font-weight:600}
+.card{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.1);border:1px solid #e2e8f0}
+.card img{width:100%;height:200px;object-fit:cover}
+.card-body{padding:16px}
+.card-body p{font-size:13px;color:#64748b}
+.precio{color:#0f766e!important;font-weight:800;font-size:18px!important}
+button{background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;border:none;padding:12px;border-radius:999px;cursor:pointer;font-weight:700;margin-top:10px;width:100%}
+.detalle{background:#fff;border-radius:20px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.1)}
+.detalle img{width:100%;height:260px;object-fit:cover;border-radius:14px}
+.detalle>button{width:auto;background:#0f172a}
+.oculto{display:none}
+#cotizador,#contacto{background:#fff;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.1);margin-top:20px}
+form{display:flex;flex-direction:column;gap:10px;max-width:520px}
+input,select,textarea{padding:12px;border:1.5px solid #cbd5e1;border-radius:12px}
+.error{color:red;font-weight:700}
+footer{background:#0f172a;color:#fff;text-align:center;padding:24px;margin-top:30px}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <h1>✈️ Rumbo Aventura</h1>
+  <nav><a href="#inicio">Inicio</a><a href="#destinos">Destinos</a><a href="#cotizador">Cotizador</a><a href="#contacto">Contacto</a></nav>
+</header>
+
+<section id="inicio" class="banner">
+  <h2>Tu próxima aventura<br>empieza aquí 🌎</h2>
+  <p>Paquetes nacionales e internacionales al mejor precio</p>
+  <input type="text" id="buscador" placeholder="🔍 Buscar destino... Ej: Cartagena, París...">
+</section>
+
+<section><h2>⭐ Destinos Destacados</h2><div id="destacados" class="grid"></div></section>
+
+<section id="destinos">
+  <h2>🌍 Todos los Destinos</h2>
+  <div class="filtros">
+    <select id="filtroContinente"><option value="todos">Todos los continentes</option><option value="América">América</option><option value="Europa">Europa</option><option value="Asia">Asia</option><option value="África">África</option></select>
+    <select id="filtroPrecio"><option value="todos">Todos los precios</option><option value="0-1000000">Hasta $1.000.000</option><option value="1000000-2500000">$1.000.000 - $2.500.000</option><option value="2500000-99999999">Más de $2.500.000</option></select>
+  </div>
+  <div id="catalogo" class="grid"></div>
+</section>
+
+<section id="detalle" class="detalle oculto">
+  <button onclick="cerrarDetalle()">← Volver</button>
+  <div id="detalleContenido"></div>
+</section>
+
+<section id="cotizador">
+  <h2>🧮 Cotizador de Viaje</h2>
+  <form id="formCotizador">
+    <label>Destino:</label><select id="cotDestino" required></select>
+    <label>Personas (1-20):</label><input type="number" id="cotPersonas" min="1" max="20" value="2" required>
+    <label>Noches (1-30):</label><input type="number" id="cotNoches" min="1" max="30" value="3" required>
+    <label>Hotel:</label><select id="cotHotel"><option value="economico">Económico (x1)</option><option value="estandar" selected>Estándar (x1.4)</option><option value="lujo">Lujo (x2)</option></select>
+    <button type="submit">Calcular Costo</button>
+  </form>
+  <div id="resultadoCotizacion"></div><p id="errorCotizacion" class="error"></p>
+</section>
+
+<section id="contacto">
+  <h2>📲 Solicita Asesoría</h2>
+  <form id="formContacto">
+    <input type="text" id="nombre" placeholder="Tu nombre" required>
+    <input type="text" id="destinoInteres" placeholder="Destino que te interesa" required>
+    <textarea id="mensaje" placeholder="¿Qué quieres saber?"></textarea>
+    <button type="submit">Enviar por WhatsApp</button>
+  </form>
+</section>
+
+<footer>© 2026 Rumbo Aventura</footer>
+
+<script>
+const destinos=[
+{id:1,nombre:"Cartagena",continente:"América",duracion:"3 noches",precio:950000,destacado:true,img:"https://picsum.photos/seed/cartagena/800/500",desc:"Playas, murallas y ciudad amurallada."},
+{id:2,nombre:"Medellín",continente:"América",duracion:"3 noches",precio:750000,destacado:true,img:"https://picsum.photos/seed/medellin/800/500",desc:"Ciudad de la eterna primavera."},
+{id:3,nombre:"Cancún",continente:"América",duracion:"5 noches",precio:2800000,destacado:true,img:"https://picsum.photos/seed/cancun/800/500",desc:"Arena blanca y mar turquesa."},
+{id:4,nombre:"París",continente:"Europa",duracion:"6 noches",precio:4500000,destacado:false,img:"https://picsum.photos/seed/paris/800/500",desc:"Torre Eiffel y la ciudad romántica."},
+{id:5,nombre:"Madrid",continente:"Europa",duracion:"5 noches",precio:3800000,destacado:false,img:"https://picsum.photos/seed/madrid/800/500",desc:"Arte y gastronomía española."},
+{id:6,nombre:"Roma",continente:"Europa",duracion:"5 noches",precio:3900000,destacado:false,img:"https://picsum.photos/seed/roma/800/500",desc:"Coliseo y Vaticano."},
+{id:7,nombre:"Tokio",continente:"Asia",duracion:"7 noches",precio:5200000,destacado:false,img:"https://picsum.photos/seed/tokio/800/500",desc:"Tecnología y templos."},
+{id:8,nombre:"Dubái",continente:"Asia",duracion:"5 noches",precio:4900000,destacado:false,img:"https://picsum.photos/seed/dubai/800/500",desc:"Lujo y desierto."},
+{id:9,nombre:"El Cairo",continente:"África",duracion:"4 noches",precio:3200000,destacado:false,img:"https://picsum.photos/seed/cairo/800/500",desc:"Pirámides de Giza."},
+{id:10,nombre:"Santa Marta",continente:"América",duracion:"4 noches",precio:1100000,destacado:false,img:"https://picsum.photos/seed/santamarta/800/500",desc:"Parque Tayrona y playas."}
+];
+const formato=n=>"$"+n.toLocaleString('es-CO');
+function crearCard(d){return `<div class="card"><img src="${d.img}"><div class="card-body"><h3>${d.nombre}</h3><p>📍 ${d.continente} | 🕒 ${d.duracion}</p><p class="precio">${formato(d.precio)} por persona</p><button onclick="verDetalle(${d.id})">Ver Detalle</button></div></div>`}
+function renderizar(l,c){document.getElementById(c).innerHTML=l.map(crearCard).join("")}
+renderizar(destinos.filter(d=>d.destacado),"destacados"); renderizar(destinos,"catalogo");
+document.getElementById("buscador").addEventListener("input",e=>{let t=e.target.value.toLowerCase(); renderizar(destinos.filter(d=>d.nombre.toLowerCase().includes(t)),"catalogo")});
+function aplicarFiltros(){let cont=document.getElementById("filtroContinente").value; let pr=document.getElementById("filtroPrecio").value; let f=destinos; if(cont!=="todos") f=f.filter(d=>d.continente===cont); if(pr!=="todos"){let[min,max]=pr.split("-").map(Number); f=f.filter(d=>d.precio>=min&&d.precio<=max)} renderizar(f,"catalogo")}
+document.getElementById("filtroContinente").addEventListener("change",aplicarFiltros);
+document.getElementById("filtroPrecio").addEventListener("change",aplicarFiltros);
+function verDetalle(id){let d=destinos.find(x=>x.id===id); document.getElementById("detalle").classList.remove("oculto"); document.getElementById("detalleContenido").innerHTML=`<img src="${d.img}"><h2>${d.nombre}</h2><p><b>Continente:</b> ${d.continente}</p><p><b>Duración:</b> ${d.duracion}</p><p><b>Precio:</b> ${formato(d.precio)}</p><p>${d.desc}</p>`; document.getElementById("detalle").scrollIntoView({behavior:'smooth'})}
+function cerrarDetalle(){document.getElementById("detalle").classList.add("oculto")}
+let sel=document.getElementById("cotDestino"); destinos.forEach(d=>{sel.innerHTML+=`<option value="${d.id}">${d.nombre} - ${formato(d.precio)}</option>`});
+document.getElementById("formCotizador").addEventListener("submit",e=>{e.preventDefault(); let err=document.getElementById("errorCotizacion"); let res=document.getElementById("resultadoCotizacion"); err.textContent=""; res.innerHTML=""; let dest=destinos.find(d=>d.id==sel.value); let per=Number(document.getElementById("cotPersonas").value); let noc=Number(document.getElementById("cotNoches").value); let hotel=document.getElementById("cotHotel").value; if(!dest||per<1||per>20||noc<1||noc>30){err.textContent="⚠️ Revisa: personas (1-20) y noches (1-30)."; return} let mult={economico:1,estandar:1.4,lujo:2}; let base=dest.precio*per; let extra=base*(mult[hotel]-1); let total=base+extra; res.innerHTML=`<h3>Desglose ${dest.nombre}</h3><p>Base (${per} personas): ${formato(base)}</p><p>Hotel ${hotel} (x${mult[hotel]}): + ${formato(extra)}</p><p>Noches: ${noc}</p><h3>Total: ${formato(total)}</h3>`});
+document.getElementById("formContacto").addEventListener("submit",e=>{e.preventDefault(); let nom=document.getElementById("nombre").value; let des=document.getElementById("destinoInteres").value; let men=document.getElementById("mensaje").value; let txt=`Hola Rumbo Aventura, soy ${nom}. Me interesa ${des}. ${men}`; window.open(`https://wa.me/573001234567?text=${encodeURIComponent(txt)}`,"_blank")});
+</script>
+</body>
+</html>
